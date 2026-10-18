@@ -1,0 +1,24 @@
+# ─── AI Video Smoother – Backend Dependencies ─────────────────────────────────
+# Python 3.11-3.13 compatible, CPU-only, Windows-safe.
+# Pin minor versions for reproducibility; allow patch updates.
+
+# Web framework
+fastapi>=0.115.0,<1.0
+uvicorn[standard]>=0.30.0,<1.0
+python-multipart>=0.0.9,<1.0
+httpx>=0.27.0,<1.0
+
+# FFmpeg bundled binary (no system install needed on Windows)
+imageio-ffmpeg>=0.5.1,<1.0
+
+# Video / image processing
+opencv-python-headless>=4.10.0,<5.0
+
+# Async background jobs
+anyio>=4.4.0,<5.0
+
+# Data validation
+pydantic>=2.7.0,<3.0
+
+# Utility
+aiofiles>=23.2.1,<25.0
