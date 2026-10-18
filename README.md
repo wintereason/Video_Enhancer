@@ -24,6 +24,25 @@ uvicorn backend.main:app --reload
 ```
 Open http://127.0.0.1:8000 . API health: http://127.0.0.1:8000/api/health .
 
+## Deployment
+
+The application uses FFmpeg and long-running background jobs, so deploy the
+frontend and backend separately:
+
+1. Create a Render Web Service from this repository. Render will use
+   [`render.yaml`](./render.yaml) to install the Python dependencies and start
+   the FastAPI backend.
+2. Copy the Render service URL, for example
+   `https://your-service.onrender.com`.
+3. Create a Vercel project from this repository. The root `vercel.json` builds
+   the [`frontend`](./frontend/) Vite application.
+4. Add the Vercel environment variable `VITE_API_URL` with the Render service
+   URL, then redeploy.
+
+The Render service uses local disk and in-memory job state, so it is suitable
+for a demo deployment but not for durable production storage or multiple
+backend instances.
+
 If PowerShell blocks activation, use `venv\Scripts\python.exe -m pip install -r backend\requirements.txt`, then `venv\Scripts\python.exe -m uvicorn backend.main:app --reload`.
 
 ## What the modes do

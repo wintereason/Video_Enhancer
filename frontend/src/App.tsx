@@ -18,6 +18,9 @@ import {
   HardDrive
 } from 'lucide-react';
 
+const API_BASE_URL = (import.meta.env.VITE_API_URL || '').replace(/\/$/, '');
+const apiUrl = (path: string) => `${API_BASE_URL}${path}`;
+
 interface HealthData {
   status: string;
   ffmpeg_available: boolean;
@@ -99,7 +102,7 @@ export default function App() {
 
   // Fetch health on mount
   useEffect(() => {
-    fetch('/api/health')
+    fetch(apiUrl('/api/health'))
       .then((res) => res.json())
       .then((data: HealthData) => setHealth(data))
       .catch((err) => {
@@ -122,7 +125,7 @@ export default function App() {
 
     const interval = setInterval(async () => {
       try {
-        const res = await fetch(`/api/jobs/${jobId}`);
+        const res = await fetch(apiUrl(`/api/jobs/${jobId}`));
         if (!res.ok) throw new Error('Failed to fetch job status');
         const data = await res.json();
         setJobStatus(data.status);
@@ -158,7 +161,7 @@ export default function App() {
 
     try {
       setUploadProgress(40);
-      const res = await fetch('/api/upload', {
+      const res = await fetch(apiUrl('/api/upload'), {
         method: 'POST',
         body: formData,
       });
@@ -217,7 +220,7 @@ export default function App() {
     formData.append('quality', quality);
 
     try {
-      const res = await fetch(`/api/process/${videoId}`, {
+      const res = await fetch(apiUrl(`/api/process/${videoId}`), {
         method: 'POST',
         body: formData,
       });
@@ -237,7 +240,7 @@ export default function App() {
   const handleCancelJob = async () => {
     if (!jobId) return;
     try {
-      await fetch(`/api/jobs/${jobId}/cancel`, { method: 'POST' });
+      await fetch(apiUrl(`/api/jobs/${jobId}/cancel`), { method: 'POST' });
       setStatusMessage('Cancelling job...');
     } catch (err) {
       console.error('Cancel request failed:', err);
@@ -626,7 +629,7 @@ export default function App() {
                 </div>
                 <video
                   ref={originalVideoRef}
-                  src={`/api/preview/original/${jobResult.video_id}`}
+                  src={apiUrl(`/api/preview/original/${jobResult.video_id}`)}
                   className="video-element"
                   controls
                   onTimeUpdate={handleSeekSync}
@@ -642,7 +645,7 @@ export default function App() {
                 </div>
                 <video
                   ref={processedVideoRef}
-                  src={jobResult.preview_url}
+                  src={apiUrl(jobResult.preview_url)}
                   className="video-element"
                   controls
                   preload="metadata"
@@ -686,7 +689,7 @@ export default function App() {
             {/* Download & New Video Actions */}
             <div className="download-bar">
               <a
-                href={jobResult.download_url}
+                href={apiUrl(jobResult.download_url)}
                 className="btn-download"
                 download
               >
