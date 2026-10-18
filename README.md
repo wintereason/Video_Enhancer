@@ -32,6 +32,10 @@ frontend and backend separately:
 1. Create a Render Web Service from this repository. Render will use
    [`render.yaml`](./render.yaml) to install the Python dependencies and start
    the FastAPI backend.
+   If configuring the service manually, use `pip install -r requirements.txt`
+   as the build command and
+   `cd backend && uvicorn main:app --host 0.0.0.0 --port $PORT` as the start
+   command.
 2. Copy the Render service URL, for example
    `https://your-service.onrender.com`.
 3. Create a Vercel project from this repository. The root `vercel.json` builds
